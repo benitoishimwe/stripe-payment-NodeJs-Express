@@ -6,9 +6,13 @@ const app = express();
 
 // controller
 const stripeController = require('./controllers/stripeController');
+const webhookController = require('./controllers/webhookController');
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
+
+// Webhook must use raw body — register before express.json()
+app.post('/webhook', express.raw({ type: 'application/json' }), webhookController);
 
 app.use(express.json());
 app.use(express.static('./public'));
